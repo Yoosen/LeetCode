@@ -5,10 +5,10 @@
 using namespace std;
 
 int res(int a) {
-	int ans = 2;
+	int ans = 1;
 	for (int i = 1; i <= a; ++i)
 	{
-		ans *= 2;
+		ans /= 2;
 	}
 	return ans;
 }
@@ -18,11 +18,14 @@ int main() {
 	scanf("%d", &t);
 
 	int i = 1;
-	while(t > 0) {
+
+	while(t > res(i)) {
 		sum += res(i) * i;
 		t -= res(i);
 		i++;
 	}
+
+	sum += i * t;
 
 	printf("%d\n", sum);
 	return 0;
