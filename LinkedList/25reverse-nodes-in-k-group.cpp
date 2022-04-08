@@ -1,4 +1,4 @@
-LeetCode 25 K 个一组翻转链表
+// LeetCode 25 K 个一组翻转链表
 // 25. K 个一组翻转链表
 // 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
 
@@ -49,45 +49,45 @@ LeetCode 25 K 个一组翻转链表
  */
 class Solution {
 public:
-	pair<ListNode*, ListNode*> reverse(ListNode* head, ListNode* tail) {
-		ListNode* prev = nullptr;
-		ListNode* p = head;
+    pair<ListNode*, ListNode*> reverse(ListNode* head, ListNode* tail) {
+        ListNode* prev = nullptr;
+        ListNode* p = head;
 
-		while(prev != tail) {
-			ListNode* nex = p-next;
-			p->next = prev;
-			prev = p;
-			p = nex;
-		}
+        while(prev != tail) {
+            ListNode* nex = p->next;
+            p->next = prev;
+            prev = p;
+            p = nex;
+        }
 
-		return {tail, head};
-	}
+        return {tail, head};
+    }
 
     ListNode* reverseKGroup(ListNode* head, int k) {
-    	ListNode* hair = new ListNode(0);
-    	hair->next = head;
-    	ListNode* pre = hair;
+        ListNode* hair = new ListNode(0);
+        hair->next = head;
+        ListNode* pre = hair;
 
-    	while (head) {
-    		ListNode* tail = pre;
-    		for(int i = 0; i < k; i++) {
-    			tail = tail->next;
-    			if(!tail) {
-    				return hail->next;
-    			}
-    		}
+        while (head) {
+            ListNode* tail = pre;
+            for(int i = 0; i < k; i++) {
+                tail = tail->next;
+                if(!tail) {
+                    return hair->next;
+                }
+            }
 
-    		ListNode* nex = tail->next;
-    		pair<ListNode*, ListNode*> result = reverse(head, tail);
-    		head = result.first;
-    		tail = result.second;
+            ListNode* nex = tail->next;
+            pair<ListNode*, ListNode*> result = reverse(head, tail);
+            head = result.first;
+            tail = result.second;
 
-    		pre->next = head;
-    		tail->next = nex;
-    		pre = tail;
-    		head = tail->next;
-    	}
+            pre->next = head;
+            tail->next = nex;
+            pre = tail;
+            head = tail->next;
+        }
 
-    	return hair->next;
+        return hair->next;
     }
 };
