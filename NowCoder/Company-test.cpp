@@ -1,3 +1,194 @@
+2022.8.30 携程4.cpp
+
+// 游游得到了一个有n个数字的数列。
+// 游游定义了“平滑值”的概念：平滑值指任意两个相邻的数的差的绝对值的量大值。例[1,2,5,7,8]的平滑值是3。
+// 游游现在想知道，在只修改一个位置的数字(可以修改为任意值)或者不修改的情况下，数列的平滑值最小是多少？
+
+// 输入描述:
+// 第一行包含一个数字n(2 <=n <= 2 * 10^5)，数字个数。
+// 第二行包含n个数字,代表数列1e-9 <= ai <= 1e9。
+
+// 输出描述:
+// 输出一个整数，代表数列最小的平滑值。
+
+// 示例1：
+// 输入
+// 3
+// 1 3 4
+
+// 输出
+// 1
+
+// 说明
+// 将第一个数字修改为3， 平滑值变为 1，可以证明这是最优的方案之一
+
+// 示例2：
+// 输入
+// 5
+// -1 1 2 5 7
+
+// 输出
+// 2
+
+// 最开始的平滑值最大值是maxValue
+// 然后再遍历一下，如果当前num[i]和前面的num[i-1]的平滑值==maxValue，
+// 我们进行这样的操作
+// 令 num[i] = (num[i - 1] + num[i + 1]) / 2求一次maxValue（整个数组），还原num[i]
+// 令 num[i - 1] = (num[i - 2] + num[i]) / 2求一次maxValue（整个数组），还原num[i - 1]
+// break，不用继续循环了。答案就是三次maxValue的最小值。
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// 返回数组中最大差值
+int getMax(const vector<int>& nums) {
+    int maxValue = 0;
+    int n = nums.size();
+
+    for(int i = 1; i < n; ++i) {
+        maxValue = max(maxValue, abs(nums[i] - nums[i - 1]));
+    }
+
+    return maxValue;
+}
+
+
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> nums(n, 0);
+
+    for (int i = 0; i < n; ++i) {
+        int tmp;
+        cin >> tmp;
+        nums[i] = tmp;
+    }
+
+    int maxValue = getMax(nums);
+    for(int i = 1; i < n; ++i) {
+        if(abs(nums[i] - nums[i - 1]) == maxValue) {
+            int tmp;
+
+            //num[i - 1] = (num[i - 2] + num[i]) / 2
+            // num[i - 1] 要修改
+            tmp = nums[i - 1];      // 暂存
+            if(i == 1) {
+                nums[i - 1] = nums[i];
+            } else {
+                nums[i - 1] = (nums[i - 2] + nums[i]) / 2;
+            }
+            maxValue = min(maxValue, getMax(nums));
+            nums[i - 1] = tmp;  // 还原
+
+            tmp = nums[i];      // 暂存
+            if(i == n - 1) {
+                nums[i] = nums[i - 1];
+            } else {
+                nums[i] = (nums[i - 1] + nums[i + 1]) / 2;
+            }
+            maxValue = min(maxValue, getMax(nums));
+            nums[i] = tmp;  // 还原
+
+            break;
+        }
+    }
+
+    cout << maxValue << endl;
+    return 0;
+}
+
+
+
+
+
+
+// 携程3.java
+
+import java.util.*;
+
+public class Solution3 {
+    static int n;
+    static int[] count; // count数组统计树中颜色为r g b的节点数量
+    static int[] colors; // 表示节点 i的颜色
+    static boolean[] visited; // 节点i是否访问过
+    static int ans; // 合法的边的数量
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        n = Integer.parseInt(scanner.nextLine());
+        count = new int[3]; // count[0]代表树中颜色为 r 的节点数量，count[1]代表树中颜色 g...，
+        colors = new int[n + 1];  // colors[i]代表节点i的颜色
+        visited = new boolean[n + 1]; // 用来记录节点 i是否被访问过
+        String s = scanner.nextLine();
+        for (int i = 0; i < s.length(); i++) { // 给 count和 colors数组赋值
+            if (s.charAt(i) == 'r') {
+                count[0]++;
+                colors[i + 1] = 0;
+            } else if (s.charAt(i) == 'g') {
+                count[1]++;
+                colors[i + 1] = 1;
+            } else {
+                count[2]++;
+                colors[i + 1] = 2;
+            }
+        }
+
+
+        ArrayList<Integer>[] graph = new ArrayList[n + 1]; // 用来表示题目中所述无向图（树）
+        for (int i = 0; i < n + 1; i++) {
+            graph[i] = new ArrayList<Integer>();
+        }
+        for (int i = 0; i < n - 1; i++) {
+            String[] split = scanner.nextLine().split(" ");
+            int a = Integer.parseInt(split[0]);
+            int b = Integer.parseInt(split[1]);
+            graph[a].add(b);
+            graph[b].add(a);
+        }
+        int[] dfs = dfs(1, graph); // 随便选一个节点作为根节点，这里选择 节点 1，验证代码是否正确只需要把所有可能的根节点枚举一遍，看是否结果是相同的即可
+        System.out.println(ans);
+    }
+
+    public static int[] dfs(int root, ArrayList<Integer>[] graph) { // 返回以root为根节点的子树的有多少个r节点，g节点，b节点
+        visited[root] = true; // 把 root标记为已访问，那么就相当于把root节点的所有边全部砍断
+        int[] sumCount = new int[3];
+        for (Integer child : graph[root]) { // 对于 删除root节点后的每个子树child
+            if (visited[child]) {
+                continue;
+            }
+            int[] dfs = dfs(child, graph); // 返回以child为根节点的子树的有多少个r节点，g节点，b节点
+            if (check(dfs) && check(new int[]{count[0] - dfs[0], count[1] - dfs[1], count[2] - dfs[2]})) { // 如果子树child中的rgb节点数符合要求，且剩下的另一半树的节点值也符合要求
+                ans++; // 从root到child的这条边是合理的
+            }
+            for (int i = 0; i < sumCount.length; i++) { // 以root为根节点的树的中包含rgb节点的数量是其所有子树的和
+                sumCount[i] += dfs[i];
+            }
+        }
+        sumCount[colors[root]]++; // 加上root本身的颜色
+        visited[root] = false;
+        return sumCount;
+    }
+
+    public static boolean check(int[] arr) {
+        for (int i : arr) {
+            if (i <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+
+
+
+
+
+
 2022.8.28 字节
 
 #include <bits/stdc++.h>
