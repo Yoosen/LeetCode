@@ -15,5 +15,5 @@
 | [SlidingWindow](./SlidingWindow) | [Stack](./Stack) | [String](./String) |
 | [UnionFind](./UnionFind) |                                            |                            |
 
-![overview](./Others/overview.png)
+<img src="./Others/overview.png" alt="overview" style="zoom: 80%;" />
 
