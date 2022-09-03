@@ -155,20 +155,21 @@ void mergeSort (vector<int>& nums, int l, int r, vector<int>& tmp) {
         tmp[k] = nums[k];
     }
     for(int k = l, k <= r; ++k) {
-		// 1.当 i = m + 1时：代表左子数组已合并完
+        // 1.当 i = m + 1时：代表左子数组已合并完
         // 因此添加右子数组当前元素 tmp[j] ，并执行 j = j + 1
-        if(i == m + 1)
+        if(i == m + 1) {
             nums[k] = tmp[j++];
-		// 2.否则，当 j = r + 1 时： 代表右子数组已合并完，因此添加左子数组当前元素 tmp[i]，并执行 i = i + 1；
-		// 3.否则，当 tmp[i] <= tmp[j] 时： 添加左子数组当前元素 tmp[i] ，并执行 i = i + 1；
-		else if(j == r + 1 || tmp[i] <= tmp[j]) {
-			nums[k] = tmp[i++];
-		}
-		// 4.否则（即 tmp[i] > tmp[j]）时：添加右子数组当前元素 tmp[j] ，并执行 j = j + 1；
-		else {
-			nums[k] = tmp[j++];
-		}
-	}
+        }
+        // 2.否则，当 j = r + 1 时： 代表右子数组已合并完，因此添加左子数组当前元素 tmp[i]，并执行 i = i + 1；
+        // 3.否则，当 tmp[i] <= tmp[j] 时： 添加左子数组当前元素 tmp[i] ，并执行 i = i + 1；
+        else if (j == r + 1 || tmp[i] <= tmp[j]) {
+            nums[k] = tmp[i++];
+        }
+        // 4.否则（即 tmp[i] > tmp[j]）时：添加右子数组当前元素 tmp[j] ，并执行 j = j + 1；
+        else {
+            nums[k] = tmp[j++];
+        }
+    }
 }
 ```
 
