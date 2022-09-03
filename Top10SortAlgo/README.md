@@ -1,6 +1,6 @@
 # 十大经典排序算法
 
-![](D:\Work\LeetCode\Top10SortAlgo\img\top10.png)
+![](./img/top10.png)
 
 
 
@@ -119,43 +119,56 @@ void maxHeapify(vector<int>& nums, int i, int n) {
 **基本思路：** 借助额外空间，合并两个有序数组，得到更长的有序数组。例如：「力扣」第 88 题：合并两个有序数组。
 **算法思想： **分而治之（分治思想）。「分而治之」思想的形象理解是「曹冲称象」、MapReduce，在一定情况下可以并行化。
 
-将无序数组拆分，排序后再合并成大的有序数组。
+[更好的讲解](https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/solution/jian-zhi-offer-51-shu-zu-zhong-de-ni-xu-pvn2h/)
+
+算法流程：
+
+1. 终止条件： 当 l≥r 时，代表子数组长度为 1 ，此时终止划分；
+2. 递归划分： 计算数组中点 m ，递归划分左子数组 merge_sort(l, m) 和右子数组 merge_sort(m + 1, r) ；
+3. 合并：
+   1. 暂存数组 nums 闭区间 [i, r] 内的元素至辅助数组 tmp；
+   2. 循环合并： 设置双指针 i, j 分别指向 左/右 子数组的首元素；
+      - 当 i = m + 1 时： 代表左子数组已合并完，因此添加右子数组当前元素 tmp[j]，并执行 j = j + 1；
+      - 否则，当 j = r + 1 时： 代表右子数组已合并完，因此添加左子数组当前元素 tmp[i]，并执行 i = i + 1；
+      - 否则，当 tmp[i] ≤ tmp[j] 时： 添加左子数组当前元素 tmp[i]，并执行 i = i + 1；
+      - 否则（即 tmp[i] > tmp[j]）时： 添加右子数组当前元素 tmp[j]，并执行 j = j + 1
 
 ```cpp
-vector<int> tmp;
-
 vector<int> sortArray(vector<int>& nums) {
     int n = nums.size();
-    tmp = nums;
-    mergeSort(nums, 0, n - 1);
+    vector<int> tmp(n);
+    mergeSort(nums, 0, n - 1, tmp);
     return nums;
 }
 
-void mergeSort (vector<int>& nums, int l, int r) {
-    if (l >= r) return; // 不需进行排列
-    int mid = l + (r - l) / 2;
+void mergeSort (vector<int>& nums, int l, int r, vector<int>& tmp) {
+    if (l >= r) return; // 终止条件，不需进行排列
+    int m = l + (r - l) / 2;
     // 自底向上
-    mergeSort(nums, l, mid);
-    mergeSort(nums, mid + 1, r);
+    mergeSort(nums, l, m, tmp);
+    mergeSort(nums, m + 1, r, tmp);
     // 排序当前数组
-    int i = l, j = mid + 1, pos = l;
-    while (i <= mid && j <= r) {
-        if (nums[i] <= nums[j]) {
-            tmp[pos] = nums[i];
-            ++i;
-        } else {
-            tmp[pos] = nums[j];
-            ++j;
-        }
-        ++pos;
+    int i = l, j = m + 1, pos = l;
+
+    // [l, r] 区间拷贝下来进行排序
+    for (int k = i; k <= m; ++k) {
+        tmp[k] = nums[k];
     }
-    for (int k = i; k <= mid; ++k) {
-        tmp[pos++] = nums[k];
-    }
-    for (int k = j; k <= r; ++k) {
-        tmp[pos++] = nums[k];
-    }
-    copy(tmp.begin() + l, tmp.begin() + r + 1, nums.begin() + l);
+    for(int k = l, k <= r; ++k) {
+		// 1.当 i = m + 1时：代表左子数组已合并完
+        // 因此添加右子数组当前元素 tmp[j] ，并执行 j = j + 1
+        if(i == m + 1)
+            nums[k] = tmp[j++];
+		// 2.否则，当 j = r + 1 时： 代表右子数组已合并完，因此添加左子数组当前元素 tmp[i]，并执行 i = i + 1；
+		// 3.否则，当 tmp[i] <= tmp[j] 时： 添加左子数组当前元素 tmp[i] ，并执行 i = i + 1；
+		else if(j == r + 1 || tmp[i] <= tmp[j]) {
+			nums[k] = tmp[i++];
+		}
+		// 4.否则（即 tmp[i] > tmp[j]）时：添加右子数组当前元素 tmp[j] ，并执行 j = j + 1；
+		else {
+			nums[k] = tmp[j++];
+		}
+	}
 }
 ```
 
@@ -165,7 +178,7 @@ void mergeSort (vector<int>& nums, int l, int r) {
 
 **时间复杂度:** $O(n^2)$ 
 
-**空间复杂度：** $1$
+**空间复杂度：** $O(1)$
 
 比较相邻元素，如果第一个比第二个大，则交换
 
