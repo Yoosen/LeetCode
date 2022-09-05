@@ -39,31 +39,63 @@ class Solution {
 public:
     int minDistance(string word1, string word2) {
     	int m = word1.length(), n = word2.length();
+
     	vector<vector<int>> dp(m + 1, vector<int>(n + 1));
 
-    	// 第一列
-    	for(int i = 1; i <= m; i++) {
+    	// word2为空，只能删除
+    	for(int i = 0; i <= m; ++i) {
     		dp[i][0] = i;
     	}
-
-    	// 第一行
-    	for(int j = 1; j <= n; j++) {
+    	// word1为空，只能增加
+    	for(int j = 0; j <= n; ++j) {
     		dp[0][j] = j;
     	}
 
-    	for(int i = 1; i <= m; i++) {
-    		for(int j = 1; j <= n; j++) {
+    	for(int i = 1; i <= m; ++i) {
+    		for(int j = 1; j <= n; ++j) {
     			if(word1[i - 1] == word2[j - 1]) {
-    				// 如果前一个元素相同，那就不用采取任何操作
     				dp[i][j] = dp[i - 1][j - 1];
     			}
-
     			else {
-    				// 三种可能，替换、删除、插入
-    				dp[i][j] = 1 + min(min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]);
+    				// 分别对应删除、插入和替换
+    				dp[i][j] = min(dp[i - 1][j], min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
     			}
     		}
     	}
+
     	return dp[m][n];
     }
 };
+
+// class Solution {
+// public:
+//     int minDistance(string word1, string word2) {
+//     	int m = word1.length(), n = word2.length();
+//     	vector<vector<int>> dp(m + 1, vector<int>(n + 1));
+
+//     	// 第一列
+//     	for(int i = 1; i <= m; i++) {
+//     		dp[i][0] = i;
+//     	}
+
+//     	// 第一行
+//     	for(int j = 1; j <= n; j++) {
+//     		dp[0][j] = j;
+//     	}
+
+//     	for(int i = 1; i <= m; i++) {
+//     		for(int j = 1; j <= n; j++) {
+//     			if(word1[i - 1] == word2[j - 1]) {
+//     				// 如果前一个元素相同，那就不用采取任何操作
+//     				dp[i][j] = dp[i - 1][j - 1];
+//     			}
+
+//     			else {
+//     				// 三种可能，替换、删除、插入
+//     				dp[i][j] = 1 + min(min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]);
+//     			}
+//     		}
+//     	}
+//     	return dp[m][n];
+//     }
+// };

@@ -1,3 +1,385 @@
+// 拼多多 2022.9.3
+#include <bits/stdc++.h>
+
+using namespace std;
+
+//int main() {
+//    int n, c, r;
+//    cin >> n >> c >> r;
+//
+//    int m = n / c;
+//    vector<pair<int, int>> stus;
+//    stus.clear();
+//    for (int i = 0; i < n; ++i) {
+//        int id, grade;
+//        cin >> id >> grade;
+//        stus.push_back({id, grade});
+//    }
+//
+//    sort(stus.begin(), stus.end(), [](const pair<int, int> &a, const pair<int, int> &b) {
+//        return a.second > b.second;
+//    });
+//
+//    int sum = 0;
+//    int count = 0;
+//
+//    while (r < stus.size()) {
+//        sum += stus[r].second;
+//        r += m;
+//        count++;
+//    }
+//    cout << sum / count << endl;
+//}
+
+//int main() {
+//    string s, t;
+//    cin >> s >> t;
+//
+//    if(s.length() < t.length()) {
+//        cout << s << endl;
+//    } else {
+//
+//    }
+//
+//    return 0;
+//}
+
+//int main() {
+//    int t = 0;
+//    cin >> t;
+//
+//    while (t--) {
+//        int n;
+//        cin >> n;
+//
+//        unordered_map<int, pair<char, int>> mp;
+//        for (int i = 0; i < n; ++i) {
+//            char direction;
+//            int step;
+//            cin >> direction >> step;
+//            mp[i] = {direction, step};
+//        }
+//
+//        vector<int> res;
+//        for (int i = 0; i < n; ++i) {
+//            vector<bool> used(n, false);
+//
+//            int tmp = 0;
+//            int cur = i;
+//            while(true) {
+//                bool flag = false;
+//                int size = res.size();
+//
+//                char direction = mp[cur].first;
+//                int step = mp[cur].second;
+//                used[cur] = true;
+//                switch (direction) {
+//                    case 'L': {
+//                        tmp++;
+//                        cur -= step;
+//                        if (cur >= 0 && cur < n && used[cur]) {
+//                            res.push_back(-1);
+//                        }
+//                        if(cur < 0 || cur >= n) {
+//                            res.push_back(tmp);
+//                        }
+//
+//                        if(res.size() > size) {
+//                            flag = true;
+//                        }
+//                    }
+//                        break;
+//                    case 'R' : {
+//                        tmp++;
+//                        cur += step;
+//                        if (used[cur] && cur < n && cur >= 0) {
+//                            res.push_back(-1);
+//                        }
+//                        if(cur < 0 || cur >= n) {
+//                            res.push_back(tmp);
+//                        }
+//                        if(res.size() > size) {
+//                            flag = true;
+//                        }
+//                    }
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                if(flag)
+//                    break;
+//            }
+//        }
+//
+//        for(int i = 0; i < n; ++i) {
+//            if(i == 0) cout << res[i];
+//            else cout << " " << res[i];
+//        }
+//        cout << endl;
+//    }
+//
+//
+//
+//    return 0;
+//}
+
+int main() {
+    int t = 0;
+    cin >> t;
+
+
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        string str;
+        cin >> str;
+
+        int count = 0;
+        string newStr = str;
+
+        for(int i = 0; i < str.length(); ++i) {
+            char c = str[i];
+            while (c > 'a' && count < k) {
+                c--;
+                count++;
+                if (count >= k)
+                    break;
+            }
+            newStr[i] = c;
+
+            for(int j = i + 1; j < str.length(); ++j) {
+                if(str[j] <= str[i] && str[j] >= c) {
+                    newStr[j] = c;
+                }
+            }
+            if(count >= k)
+                break;
+        }
+
+        //for (int j = 0; j < str.length(); ++j) {
+        //    char c = str[j];
+        //
+        //    if (str[j - 1] >= str[j]) {
+        //        str[j] = str[j - 1];
+        //        newStr += newStr[newStr.length() - 1];
+        //        continue;
+        //    }
+        //
+        //    while (c > 'a' && count < k) {
+        //        c--;
+        //        count++;
+        //        if (count >= k)
+        //            break;
+        //    }
+        //    newStr += c;
+        //}
+
+        if (count < k) {
+            for (int i = 0; i < n; ++i) {
+                cout << 'a';
+            }
+            cout << endl;
+        } else {
+            cout << newStr << endl;
+        }
+
+
+    }
+}
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+//int backtrack(vector<int> &tree, int root, int v1, int v2) {
+//    if (root >= tree.size()) {
+//        return -1;
+//    }
+//    if (tree[root] == v1 || tree[root] == v2)
+//        return root;
+//    int l = backtrack(tree, 2 * root + 1, v1, v2);
+//    int r = backtrack(tree, 2 * root + 2, v1, v2);
+//    if (l == -1) return r;
+//    if (r == -1) return l;
+//    return root;
+//}
+//
+//int commonAncestors(vector<int> &tree, int v1, int v2) {
+//    // write code here
+//    int res = backtrack(tree, 0, v1, v2);
+//    return tree[res];
+//}
+//
+//int main() {
+//
+//    vector<int> nums = {8, 2, 5, 6, 4, 7, 1, 3};
+//    int v1 = 2, v2 = 3;
+//    cout << commonAncestors(nums, 2, 3) << endl;
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//bool cmp(const vector<int> &a, const vector<int> &b) {
+//    return a[0] < b[0];
+//}
+//
+//int main() {
+//    int n, x;
+//    cin >> n >> x;
+//
+//    vector<vector<int>> qujian;
+//    qujian.clear();
+//    for (int i = 0; i < n; ++i) {
+//        int tmp;
+//        cin >> tmp;
+//
+//        qujian.push_back({tmp - x, tmp + x});
+//    }
+//
+//
+//    int res = 0;
+//    for (int i = 1; i < n; ++i) {
+//        if(qujian[i - 1][1] < qujian[i][0]) res++;
+//        else qujian[i][1] = min(qujian[i][1], qujian[i - 1][1]);
+//    }
+//
+//    cout << res << endl;
+//
+//}
+
+// 2.cpp
+//int main() {
+//    int n;
+//    cin >> n;
+//    vector<int> nums(n, 0);
+//
+//    unordered_set<int> nums_set;
+//    for (int i = 0; i < n; ++i) {
+//        int tmp;
+//        cin >> tmp;
+//        nums[i] = tmp;
+//        nums_set.insert(tmp);
+//    }
+//
+//    int longestStreak = 0;
+//    for (const int &num: nums_set) {
+//        if (!nums_set.count(num - 1)) {
+//            int curNum = num;
+//            int curStreak = 1;
+//
+//            while (nums_set.count(curNum + 1)) {
+//                curNum += 1;
+//                curStreak += 1;
+//            }
+//
+//            longestStreak = max(longestStreak, curStreak);
+//        }
+//    }
+//
+//    cout << longestStreak << endl;
+//}
+
+
+
+
+
+
+
+
+
+//1.cpp LeetCode 1535 找出数组游戏的赢家
+// 给你一个由 不同 整数组成的整数数组 arr 和一个整数 k 。
+//
+//每回合游戏都在数组的前两个元素（即 arr[0] 和 arr[1] ）之间进行。比较 arr[0] 与 arr[1] 的大小，较大的整数将会取得这一回合的胜利并保留在位置 0 ，较小的整数移至数组的末尾。当一个整数赢得 k 个连续回合时，游戏结束，该整数就是比赛的 赢家 。
+//
+//返回赢得比赛的整数。
+//
+//题目数据 保证 游戏存在赢家。
+//
+//示例 1：
+//
+//输入：arr = [2,1,3,5,4,6,7], k = 2
+//输出：5
+//解释：一起看一下本场游戏每回合的情况：
+//
+//因此将进行 4 回合比赛，其中 5 是赢家，因为它连胜 2 回合。
+//示例 2：
+//
+//输入：arr = [3,2,1], k = 10
+//输出：3
+//解释：3 将会在前 10 个回合中连续获胜。
+//示例 3：
+//
+//输入：arr = [1,9,8,2,3,7,6,4,5], k = 7
+//输出：9
+//示例 4：
+//
+//输入：arr = [1,11,22,33,44,55,66,77,88,99], k = 1000000000
+//输出：99
+
+//提示：
+//
+//2 <= arr.length <= 10^5
+//1 <= arr[i] <= 10^6
+//arr 所含的整数 各不相同 。
+//1 <= k <= 10^9
+
+//void split(string str, vector<int> &nums, char c) {
+//    stringstream ss(str);
+//    string tmp;
+//    while (getline(ss, tmp, c)) nums.push_back(stoi(tmp));
+//}
+//
+//int main() {
+//    string str;
+//    getline(cin, str);
+//    vector<int> nums;
+//    nums.clear();
+//
+//    split(str, nums, ' ');
+//    vector<int> nums2(nums.size() - 1, 0);
+//    for (int i = 0; i < nums.size() - 1; ++i) {
+//        nums2[i] = nums[i];
+//    }
+//    int k = nums[nums.size() - 1];
+//
+//    int i = 0, win = 0;
+//    while (win < k && i < nums2.size() - 1) {
+//        if (nums2[i] > nums2[i + 1]) {
+//            nums2[i + 1] = nums2[i];
+//            ++win;
+//        } else {
+//            win = 1;
+//        }
+//        ++i;
+//    }
+//
+//    cout << nums2[i] << endl;
+//
+//
+//    return 0;
+//}
+
 2022.8.30 携程4.cpp
 
 // 游游得到了一个有n个数字的数列。
