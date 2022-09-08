@@ -58,8 +58,8 @@ public:
     	int right = recur(root->right);
     	if(right == -1) return -1;
 
-		// 当节点root 左 / 右子树的高度差 <2 ：则返回以节点root为根节点的子树的最大高度，即节点 root 的左右子树中最大高度加 11 （ max(left, right) + 1 ）；
-		// 当节点root 左 / 右子树的高度差 ≥2 ：则返回 -1−1 ，代表 此子树不是平衡树 。
+		// 当节点 root 左 / 右子树的高度差 <2 ：则返回以节点root为根节点的子树的最大高度，即节点 root 的左右子树中最大高度加 1 （ max(left, right) + 1 ）；
+		// 当节点 root 左 / 右子树的高度差 ≥2 ：则返回 -1，代表 此子树不是平衡树 。
     	return abs(left - right) < 2 ? max(left, right) + 1 : -1;
     }
 };
