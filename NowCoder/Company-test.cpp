@@ -1,3 +1,237 @@
+2022.9.13 百度
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<char>> matrix(n, vector<char>(m));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            char c;
+            cin >> c;
+            matrix[i][j] = c;
+        }
+    }
+
+    vector<vector<int>> dp(n, vector<int>(m, 0));
+    for (int j = 1; j < m; ++j) {
+        char c = matrix[0][j - 1];
+        char d = matrix[0][j];
+
+        if (dp[0][j - 1] == -1) dp[0][j] = -1;
+        else {
+            if ((c == 'r' && d == 'd') || (c == 'e' && d == 'r') || (c == 'd' && d == 'e')) {
+                dp[0][j] = -1;
+            } else {
+                dp[0][j] = dp[0][j - 1] + 1;
+            }
+        }
+    }
+
+    for (int i = 1; i < n; ++i) {
+        char c = matrix[i - 1][0];
+        char d = matrix[i][0];
+
+        if (dp[i - 1][0] == -1) dp[i][0] = -1;
+        else {
+            if ((c == 'r' && d == 'd') || (c == 'e' && d == 'r') || (c == 'd' && d == 'e')) {
+                dp[i][0] = -1;
+            } else {
+                dp[i][0] = dp[i - 1][0] + 1;
+            }
+        }
+    }
+
+    for (int i = 1; i < n; ++i) {
+        for (int j = 1; j < m; ++j) {
+            char d = matrix[i][j];
+            if (dp[i][j - 1] == -1 && dp[i - 1][j] == -1) {
+                dp[i][j] = -1;
+            } else {
+                if (dp[i][j - 1] == -1) {
+                    char c = matrix[i - 1][j];
+                    if ((c == 'r' && d == 'd') || (c == 'e' && d == 'r') || (c == 'd' && d == 'e')) {
+                        dp[i][j] = -1;
+                    } else {
+                        dp[i][j] = dp[i - 1][j] + 1;
+                    }
+                } else if (dp[i - 1][j] == -1) {
+                    char c = matrix[i][j - 1];
+                    if ((c == 'r' && d == 'd') || (c == 'e' && d == 'r') || (c == 'd' && d == 'e')) {
+                        dp[i][j] = -1;
+                    } else {
+                        dp[i][j] = dp[i][j - 1] + 1;
+                    }
+                } else {
+                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + 1;
+                }
+
+            }
+        }
+    }
+
+
+    vector<vector<int>> dp2(n, vector<int>(m, 0));
+    for (int j = m - 1; j >= 1; --j) {
+        char d = matrix[n - 1][j - 1];
+        char c = matrix[n - 1][j];
+
+        if (dp2[n - 1][j] == -1) dp2[n - 1][j - 1] = -1;
+        else {
+            if ((c == 'd' && d == 'r') || (c == 'r' && d == 'e') || (c == 'e' && d == 'd')) {
+                dp2[n - 1][j - 1] = -1;
+            } else {
+                dp2[n - 1][j - 1] = dp2[n - 1][j] + 1;
+            }
+        }
+    }
+
+    for (int i = n - 1; i >= 1; --i) {
+        char d = matrix[i - 1][m - 1];
+        char c = matrix[i][m - 1];
+
+        if (dp2[i][m - 1] == -1) dp2[i - 1][m - 1] = -1;
+        else {
+            if ((c == 'd' && d == 'r') || (c == 'r' && d == 'e') || (c == 'e' && d == 'd')) {
+                dp2[i - 1][m - 1] = -1;
+            } else {
+                dp2[i - 1][m - 1] = dp2[i][m - 1] + 1;
+            }
+        }
+    }
+
+    for (int i = n - 1 - 1; i >= 0; --i) {
+        for (int j = m - 1 - 1; j >= 0; --j) {
+            char d = matrix[i][j];
+            if (dp2[i][j + 1] == -1 && dp2[i + 1][j] == -1) {
+                dp2[i][j] = -1;
+            } else {
+                if (dp2[i][j + 1] == -1) {
+                    char c = matrix[i + 1][j];
+                    if ((c == 'd' && d == 'r') || (c == 'r' && d == 'e') || (c == 'e' && d == 'd')) {
+                        dp2[i][j] = -1;
+                    } else {
+                        dp2[i][j] = dp2[i + 1][j] + 1;
+                    }
+                } else if (dp2[i + 1][j] == -1) {
+                    char c = matrix[i][j + 1];
+                    if ((c == 'd' && d == 'r') || (c == 'r' && d == 'e') || (c == 'e' && d == 'd')) {
+                        dp2[i][j] = -1;
+                    } else {
+                        dp2[i][j] = dp2[i][j + 1] + 1;
+                    }
+                } else {
+                    dp2[i][j] = min(dp2[i + 1][j], dp2[i][j + 1]) + 1;
+                }
+
+            }
+        }
+    }
+
+
+    int res = min(dp[n - 1][m - 1], dp2[0][0]);
+    cout << res << endl;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+//// 2.01串 连续取反 ，能否操作有限次使得所有字符相同
+//// 3
+////101
+////1111
+////1011
+////Yes
+////Yes
+////No
+//int main() {
+//    int q;
+//    cin >> q;
+//
+//    while(q--) {
+//        string str;
+//        cin >> str;
+//
+//        int num0 = 0, num1 = 0;
+//        for(auto& c : str) {
+//            if(c == '0')
+//                num0++;
+//            else
+//                num1++;
+//        }
+//
+//        if(num0 == str.length() || num1 == str.length()) {
+//            cout << "Yes" << endl;
+//            continue;
+//        }
+//
+//        if(num1 % 2 == 1 && num0 % 2 == 1) {
+//            cout << "No" << endl;
+//        } else {
+//            cout << "Yes" << endl;
+//        }
+//    }
+//    return 0;
+//}
+
+
+
+//// 1.baidu 型串
+//bool isBaidu(string str) {
+//    unordered_set<char> yy = {'a', 'e', 'i', 'o', 'u'};
+//    char c1 = str[0];
+//    char c2 = str[1];
+//    char c3 = str[2];
+//    char c4 = str[3];
+//    char c5 = str[4];
+//
+//    if(yy.count(c2) && yy.count(c3) && yy.count(c5) && !yy.count(c1) && !yy.count(c4)) {
+//        if(c2 != c5 && c2 != c3 && c3 != c5 && c1 != c4) {
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+//    }
+//    return false;
+//}
+//
+//int main() {
+//    string str;
+//    cin >> str;
+//
+//    int l = 0, r = 0;
+//    int len = str.length();
+//    unordered_map<char, int> mp;
+//
+//    int ans = 0;
+//    while(r < len) {
+//        r++;
+//
+//        while(r - l == 5) {
+//            if(isBaidu(str.substr(l, r - l))) {
+//                ans++;
+//            }
+//            l++;
+//        }
+//    }
+//
+//    cout << ans << endl;
+//
+//    return 0;
+//}
+
+
 // 拼多多 2022.9.3
 #include <bits/stdc++.h>
 
