@@ -44,6 +44,6 @@ public:
             pre = curr;
             curr = nxt;
         }
-        return prev;
+        return pre;
     }
 };
